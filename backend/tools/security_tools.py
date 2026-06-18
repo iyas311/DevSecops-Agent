@@ -27,7 +27,7 @@ class GetGuardDutyFindingsTool(BaseTool):
 
     async def execute(self, aws_profile: str = "default", max_results: int = 10) -> dict:
         try:
-            session = boto3.Session(profile_name=aws_profile)
+            session = boto3.Session(profile_name=aws_profile if aws_profile != 'default' else None)
             client = session.client('guardduty')
             
             # First, get the detector ID
@@ -88,7 +88,7 @@ class GetSecurityHubFindingsTool(BaseTool):
 
     async def execute(self, aws_profile: str = "default") -> dict:
         try:
-            session = boto3.Session(profile_name=aws_profile)
+            session = boto3.Session(profile_name=aws_profile if aws_profile != 'default' else None)
             client = session.client('securityhub')
             
             findings = client.get_findings(
@@ -117,7 +117,7 @@ class LookupCloudTrailEventsTool(BaseTool):
 
     async def execute(self, aws_profile: str = "default", max_results: int = 10) -> dict:
         try:
-            session = boto3.Session(profile_name=aws_profile)
+            session = boto3.Session(profile_name=aws_profile if aws_profile != 'default' else None)
             client = session.client('cloudtrail')
             events = client.lookup_events(MaxResults=max_results)
             events_dict = json.loads(json.dumps(events.get('Events', []), default=str))
@@ -140,7 +140,7 @@ class QueryCloudWatchLogsTool(BaseTool):
 
     async def execute(self, log_group_name: str, filter_pattern: str = "ERROR", aws_profile: str = "default") -> dict:
         try:
-            session = boto3.Session(profile_name=aws_profile)
+            session = boto3.Session(profile_name=aws_profile if aws_profile != 'default' else None)
             client = session.client('logs')
             response = client.filter_log_events(
                 logGroupName=log_group_name,

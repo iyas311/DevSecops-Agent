@@ -11,7 +11,12 @@ class BedrockClient:
     """Client for interacting with Amazon Bedrock via the Converse API."""
     
     def __init__(self, region_name: str = "us-east-1"):
-        self.client = boto3.client("bedrock-runtime", region_name=region_name)
+        # Use a session without a named profile so it automatically falls back to:
+        # 1. Environment variables (AWS_ACCESS_KEY_ID etc.)
+        # 2. EC2 Instance Metadata Service (IAM Role) when running on AWS
+        # 3. ~/.aws/credentials only if available (local dev)
+        session = boto3.Session(region_name=region_name)
+        self.client = session.client("bedrock-runtime")
 
     async def converse_stream(
         self,

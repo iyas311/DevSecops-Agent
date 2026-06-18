@@ -26,7 +26,7 @@ class QueryKnowledgeBaseTool(BaseTool):
             return {"message": "Knowledge base is not configured (BEDROCK_KNOWLEDGE_BASE_ID is missing). Please refer to public AWS documentation instead."}
             
         try:
-            client = boto3.client('bedrock-agent-runtime', region_name=settings.AWS_REGION)
+            client = boto3.Session().client('bedrock-agent-runtime', region_name=settings.AWS_REGION)
             response = client.retrieve(
                 knowledgeBaseId=kb_id,
                 retrievalQuery={'text': query},

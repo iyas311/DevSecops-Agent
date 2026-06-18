@@ -18,7 +18,7 @@ class ListPublicS3BucketsTool(BaseTool):
 
     async def execute(self, aws_profile: str = "default") -> dict:
         try:
-            session = boto3.Session(profile_name=aws_profile)
+            session = boto3.Session(profile_name=aws_profile if aws_profile != 'default' else None)
             s3_client = session.client('s3')
             
             buckets = s3_client.list_buckets().get('Buckets', [])
@@ -58,7 +58,7 @@ class CheckBackupStatusTool(BaseTool):
 
     async def execute(self, aws_profile: str = "default") -> dict:
         try:
-            session = boto3.Session(profile_name=aws_profile)
+            session = boto3.Session(profile_name=aws_profile if aws_profile != 'default' else None)
             client = session.client('backup')
             
             vaults = client.list_backup_vaults().get('BackupVaultList', [])
@@ -85,7 +85,7 @@ class CheckKMSConfigurationTool(BaseTool):
 
     async def execute(self, aws_profile: str = "default") -> dict:
         try:
-            session = boto3.Session(profile_name=aws_profile)
+            session = boto3.Session(profile_name=aws_profile if aws_profile != 'default' else None)
             client = session.client('kms')
             keys = client.list_keys(Limit=10).get('Keys', [])
             results = []
@@ -113,7 +113,7 @@ class GetConfigComplianceTool(BaseTool):
 
     async def execute(self, aws_profile: str = "default") -> dict:
         try:
-            session = boto3.Session(profile_name=aws_profile)
+            session = boto3.Session(profile_name=aws_profile if aws_profile != 'default' else None)
             client = session.client('config')
             response = client.describe_compliance_by_config_rule(
                 ComplianceTypes=['NON_COMPLIANT']
