@@ -1,6 +1,4 @@
-"""
-Configuration module for CISA using pydantic-settings.
-"""
+import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -17,3 +15,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 settings = Settings()
+
+# Set AWS environment variables so boto3/AWS SDK automatically default to the configured region
+if settings.AWS_REGION:
+    os.environ.setdefault("AWS_DEFAULT_REGION", settings.AWS_REGION)
+    os.environ.setdefault("AWS_REGION", settings.AWS_REGION)
