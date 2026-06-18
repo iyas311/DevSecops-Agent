@@ -47,6 +47,8 @@ test*.py
 # Streamlit chat history
 frontend/chat_history.json
 frontend/chat_history_csga.json
+frontend/pages/chat_history.json
+frontend/pages/chat_history_csga.json
 
 # Terraform
 terraform/.terraform/
