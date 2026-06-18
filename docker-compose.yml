@@ -8,10 +8,12 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - AWS_PROFILE=${AWS_PROFILE:-default}
       - AWS_REGION=${AWS_REGION:-us-east-1}
+      # AWS_PROFILE is intentionally omitted so boto3 uses the EC2 IAM role
+      # (Instance Metadata Service) when running on AWS, and falls back to
+      # ~/.aws/credentials for local development.
     volumes:
-      - ~/.aws:/root/.aws:ro
+      - ~/.aws:/root/.aws:ro   # Ignored on EC2 if ~/.aws doesn't exist locally
     env_file:
       - .env
 
