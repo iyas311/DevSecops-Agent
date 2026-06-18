@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 def _get_iam_client(aws_profile: Optional[str] = None):
     """Helper to get a boto3 IAM client with an optional profile."""
-    if aws_profile:
+    if aws_profile and aws_profile != "default":
         session = boto3.Session(profile_name=aws_profile)
         return session.client("iam")
     return boto3.client("iam")
